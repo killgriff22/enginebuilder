@@ -101,7 +101,13 @@ if __name__ == "__main__":
         elif len(offsets) == 1:
             print("Inline Style engine")
         elif len(offsets) == 4:
-            if offsets[0]+offsets[3] == 0 and offsets[1]+offsets[2] == 0:
+            sort = sorted(offsets)
+            #print(sort)
+            if (
+                    sort[0]+sort[3] == 0 and sort[1]+sort[2] == 0
+                ) and not (
+                    sort[0] == 0 and sort[1] == 0 and sort[2] == 0 and sort[3] == 0
+                ):
                 print("W Style engine")
         elif len(offsets) > 2:
             if all(offset == 0 for offset in offsets):
