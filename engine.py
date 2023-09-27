@@ -6,10 +6,10 @@ banks = []  # holds cylinder numbers by bank
 Banks = []  # holds the bank objects
 offsets = []  # holds degree offsets of cylinders
 engine = None
-
+radial=None
 
 def build():
-    global nofcpb, nofb, cylinders, banks, Banks, offsets, engine
+    global nofcpb, nofb, cylinders, banks, Banks, offsets, engine,radial
     if not engine or input("build new engine?\n>>") in ['y', 'Y', 'yes', 'Yes', 'YES']:
         nofcb = int()
         cylinders = []  # holds all cylinder numbers
@@ -81,7 +81,7 @@ def build():
 
 if __name__ == "__main__":
     while True:
-        print(f"""Current Engine: {engine}
+        print(f"""Current Engine: {engine.engine_name if engine else engine}
 {'Build Engine'if engine else 'Build New Engine'}
 {'Specs' if engine else 'No Engine'}
 {f'Cyl Count: {len(cylinders)}' if engine else ''}
@@ -91,4 +91,19 @@ if __name__ == "__main__":
 {f'Engine Name: {engine.engine_name}' if engine else ''}
 {f'Stroke: {engine.stroke}' if engine else ''}
 {f'Bore: {engine.bore}' if engine else ''}""")
+        if len(offsets) == 2:
+            if offsets[0] + offsets[1] == 0 and not (offsets[0] == 0 and offsets[1] == 0):
+                print("V Style engine")
+            elif (offsets[0] == 0 and offsets[1] > 0) or (offsets[0] > 0 and offsets[1] == 0) or (offsets[0] == 0 and offsets[1]<0) or (offsets[0]<0 and offsets[1]==0):
+                print("VR or Offset V Style engine")
+            elif offsets[0] == offsets[1]:
+                print("Inline Style engine")
+        elif len(offsets) == 1:
+            print("Inline Style engine")
+        elif len(offsets) > 2:
+            if all(offset == 0 for offset in offsets):
+                print("Inline Style engine")
+            elif radial:
+                print("Radial Style engine")
+
         build()
