@@ -100,10 +100,14 @@ if __name__ == "__main__":
                 print("Inline Style engine")
         elif len(offsets) == 1:
             print("Inline Style engine")
+        elif len(offsets) == 4:
+            if offsets[0]+offsets[3] == 0 and offsets[1]+offsets[2] == 0:
+                print("W Style engine")
         elif len(offsets) > 2:
             if all(offset == 0 for offset in offsets):
                 print("Inline Style engine")
             elif radial:
                 print("Radial Style engine")
+            
 
         build()
