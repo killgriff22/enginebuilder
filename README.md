@@ -9,7 +9,7 @@ It just is, this is a fork of [Engine Builder](https://github.com/ange-yaghi/eng
 ### Running the script
 
 1. Install Python 3 on your computer if it isn't already installed
-2. Open a terminal and run `py engine.py`
+2. double click the `engine.py` script
 
 ### Using It
 
