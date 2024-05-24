@@ -186,6 +186,8 @@ if __name__ == "__main__":
                 print("Inline Style engine")
             elif radial:
                 print("Radial Style engine")
+        else:
+            print("Unknown Style engine")
             
 
         build()
