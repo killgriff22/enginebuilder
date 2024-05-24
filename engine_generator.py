@@ -132,7 +132,7 @@ class Engine:
         self.fluid_simulation_steps = 4
 
         self.idle_throttle_plate_position = 0.999
-        self.engine_sim_version = [0, 1, 12, 2]
+        self.engine_sim_version = [0, 1, 14, 2]
 
         self.timing_curve = [
             [0,18],

@@ -1,4 +1,5 @@
 import engine_generator
+from sys import argv
 nofcpb = None
 nofb = None
 cylinders = []  # holds all cylinder numbers
@@ -7,7 +8,70 @@ Banks = []  # holds the bank objects
 offsets = []  # holds degree offsets of cylinders
 engine = None
 radial=None
-
+Menus ={
+    "Main":{
+        "Engine":{
+            "Name":"",
+            "Block":{
+                "Cylinders":{
+                    "Number":{},
+                    "Banks":{},
+                    "Measurements":{}
+                },
+                "Banks":{},
+                "Starter":{},
+                "Flywheel":{},
+                "Crankshaft":{},
+                "limits":{},
+            },
+            "Cams":{},
+            "Head":{},
+            "Intake":{},
+            "Exhaust":{},
+            "Sound":{},
+        },
+        "Transmission":{},
+        "Fuel":{},
+        "Simulation":{},
+        "Timing":{}
+    }
+}
+if len(argv) > 1:
+        with open(argv[1], "r") as file:
+            content = file.read()
+            file.close()
+        content = content.split("\n")[0].split("// ")[1]
+        engine_name = content.split(" ")[0]
+        stroke = content.split(" ")[1]
+        bore = content.split(" ")[2]
+        chamber_volume = content.split(" ")[3]
+        starter_torque = content.split(" ")[4]
+        starter_speed = content.split(" ")[5]
+        idle_throttle_plate_position = content.split(" ")[6]
+        rod_length = content.split(" ")[7]
+        simulation_frequency = content.split(" ")[8]
+        redline = content.split(" ")[9]
+        rev_limit = content.split(" ")[10]
+        intake_flow_rate = content.split(" ")[11]
+        boc = content.split("|")[1].split("*")
+        banks = eval(boc[0])
+        offsets = eval(boc[1])
+        cylinders = eval(boc[2])
+        for i, bank in enumerate(banks):
+            Banks.append(engine_generator.Bank(bank, offsets[i]))
+        engine = engine_generator.Engine(Banks, cylinders)
+        engine.engine_name = engine_name
+        engine.stroke = int(stroke)
+        engine.bore = int(bore)
+        engine.chamber_volume = int(chamber_volume)
+        engine.starter_torque = int(starter_torque)
+        engine.starter_speed = int(starter_speed)
+        engine.idle_throttle_plate_position = float(idle_throttle_plate_position)
+        engine.rod_length = int(rod_length)
+        engine.simulation_frequency = int(simulation_frequency)
+        engine.redline = int(redline)
+        engine.rev_limit = int(rev_limit)
+        engine.intake_flow_rate = int(intake_flow_rate)
 def build():
     global nofcpb, nofb, cylinders, banks, Banks, offsets, engine,radial
     if not engine or input("build new engine?\n>>") in ['y', 'Y', 'yes', 'Yes', 'YES']:
@@ -77,6 +141,14 @@ def build():
         engine.engine_name = name
     engine.generate()
     engine.write_to_file(f"{engine.engine_name}.mr")
+    cntnt=None
+    with open(f"{engine.engine_name}.mr", "r") as file:
+        cntnt = file.read()
+        file.close()
+    with open(f"{engine.engine_name}.mr", "w") as file:
+        file.write(f"""// {engine.engine_name} {engine.bore} {engine.stroke} {engine.chamber_volume} {engine.starter_torque} {engine.starter_speed} {engine.idle_throttle_plate_position} {engine.rod_length} {engine.simulation_frequency} {engine.redline} {engine.rev_limit} {engine.intake_flow_rate} |{banks}*{offsets}*{cylinders}
+{cntnt}""")
+        file.close()
 
 
 if __name__ == "__main__":
